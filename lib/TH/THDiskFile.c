@@ -362,7 +362,7 @@ READ_WRITE_METHODS(double, Double,
 
 
 /* For Long we need to rewrite everything, because of the special management of longSize */
-static size_t THDiskFile_readLong(THFile *self, long *data, size_t n)
+static size_t THDiskFile_readLong(THFile *self, TH_LONG *data, size_t n)
 {
   THDiskFile *dfself = (THDiskFile*)(self);
   size_t nread = 0L;
@@ -372,11 +372,11 @@ static size_t THDiskFile_readLong(THFile *self, long *data, size_t n)
 
   if(dfself->file.isBinary)
   {
-    if(dfself->longSize == 0 || dfself->longSize == sizeof(long))
+    if(dfself->longSize == 0 || dfself->longSize == sizeof(TH_LONG))
     {
-      nread = fread__(data, sizeof(long), n, dfself->handle);
-      if(!dfself->isNativeEncoding && (sizeof(long) > 1) && (nread > 0))
-        THDiskFile_reverseMemory(data, data, sizeof(long), nread);
+      nread = fread__(data, sizeof(TH_LONG), n, dfself->handle);
+      if(!dfself->isNativeEncoding && (sizeof(TH_LONG) > 1) && (nread > 0))
+        THDiskFile_reverseMemory(data, data, sizeof(TH_LONG), nread);
     } else if(dfself->longSize == 4)
     {
       nread = fread__(data, 4, n, dfself->handle);
@@ -424,7 +424,7 @@ static size_t THDiskFile_readLong(THFile *self, long *data, size_t n)
   return nread;
 }
 
-static size_t THDiskFile_writeLong(THFile *self, long *data, size_t n)
+static size_t THDiskFile_writeLong(THFile *self, TH_LONG *data, size_t n)
 {
   THDiskFile *dfself = (THDiskFile*)(self);
   size_t nwrite = 0L;
@@ -434,17 +434,17 @@ static size_t THDiskFile_writeLong(THFile *self, long *data, size_t n)
 
   if(dfself->file.isBinary)
   {
-    if(dfself->longSize == 0 || dfself->longSize == sizeof(long))
+    if(dfself->longSize == 0 || dfself->longSize == sizeof(TH_LONG))
     {
       if(dfself->isNativeEncoding)
       {
-        nwrite = fwrite(data, sizeof(long), n, dfself->handle);
+        nwrite = fwrite(data, sizeof(TH_LONG), n, dfself->handle);
       }
       else
       {
-        char *buffer = THAlloc(sizeof(long)*n);
-        THDiskFile_reverseMemory(buffer, data, sizeof(long), n);
-        nwrite = fwrite(buffer, sizeof(long), n, dfself->handle);
+        char *buffer = THAlloc(sizeof(TH_LONG)*n);
+        THDiskFile_reverseMemory(buffer, data, sizeof(TH_LONG), n);
+        nwrite = fwrite(buffer, sizeof(TH_LONG), n, dfself->handle);
         THFree(buffer);
       }
     } else if(dfself->longSize == 4)

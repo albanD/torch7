@@ -39,6 +39,10 @@
 #define TH_INDEX_BASE 1
 #endif
 
+#ifndef TH_LONG
+#define TH_LONG int64_t
+#endif
+
 typedef void (*THErrorHandlerFunction)(const char *msg, void *data);
 typedef void (*THArgErrorHandlerFunction)(int argNumber, const char *msg, void *data);
 

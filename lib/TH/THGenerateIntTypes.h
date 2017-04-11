@@ -71,8 +71,8 @@
 #undef TH_CONVERT_REAL_TO_ACCREAL
 #undef TH_CONVERT_ACCREAL_TO_REAL
 
-#define real long
-#define accreal long
+#define real TH_LONG
+#define accreal long long
 #define TH_CONVERT_REAL_TO_ACCREAL(_val) (accreal)(_val)
 #define TH_CONVERT_ACCREAL_TO_REAL(_val) (real)(_val)
 #define Real Long
